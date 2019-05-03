@@ -1,0 +1,7 @@
+*/node_modules/
+*.swp
+node/config.json
+node/var/log/*
+!node/var/log/.gitkeep
+.DS_Store
+.idea

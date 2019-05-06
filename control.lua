@@ -6,6 +6,7 @@ require "util"
 
 Event = require('__stdlib__/stdlib/event/event')
 api = require "script.api"
+require "script.crowdcontrol"
 local output_file = 'tvc_api.json'
 
 local function init_globals()

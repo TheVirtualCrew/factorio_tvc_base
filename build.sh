@@ -13,7 +13,7 @@ release="${modname}_${new_version}"
 
 git=`which git`
 count=$($git status -su . | wc -l)
-if [ $count -gt 3 ]
+if [ $count -gt 1 ]
 then
     echo "Found uncommited files stopping"
     exit 1;

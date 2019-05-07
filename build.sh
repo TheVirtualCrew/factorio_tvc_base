@@ -1,7 +1,7 @@
 #!/bin/bash
 
 dirname="$(cd "$(dirname "$1")"; pwd -P)/$(basename "$1")"
-ignores="build.sh modportal/ .DS_Store README.md .git/"
+ignores="build.sh modportal/ .DS_Store README.md .git/ .gitignore"
 version=$(grep '"version"' info.json| cut -d ":" -f2 | sed 's/[", ]//g')
 new_version=$(echo "$version" | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}')
 version_escaped=`echo $version| sed "s/\./\\\\\\\./g"`

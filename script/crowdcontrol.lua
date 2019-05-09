@@ -97,8 +97,8 @@ crowdcontrol.update = function(event)
 	end
 end
 
+crowdcontrol.add_interfaces()
 Event.on_init(crowdcontrol.init)
-
 Event.on_configuration_changed(function(event)
 	if event.name:find('tvc_api_base') then
 		if global.crowdcontrol.config then

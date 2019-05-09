@@ -13,22 +13,25 @@ buffManager.get_data = function()
 end
 --
 -- field = 'manual_crafting_speed_modifier',
--- type = 'handcraft'
+-- config_type = 'handcraft'
 -- target = 'force',
+-- type_target = 'player'
 -- duration = 3600
--- source = 'display_name'
+-- display_name = 'display_name'
 -- value = -1
 -- calc = function(orig_value, current_value, target)...
+
+-- /c remote.call('tvc_api.crowdcontrol', 'apply', {type = 'force', type_target = 'player', field = 'manual_crafting_speed_modifier', config_type = 'handcraft', value=-1, duration=3200, display_name="test"})
 buffManager.add_buff = function(buff)
 	local data = buffManager.get_data()
 	local target_table = false
-	local target_setting = false
+	local target_setting
 	if (buff.type == 'force') then
 		target_table = 'forces'
 	elseif (buff.type == 'player') then
 		target_table = 'players'
 	elseif buff.type == 'setting' then
-		target_setting = true
+		target_setting = buff.type_target
 	end
 
 	if target_table then
@@ -42,7 +45,7 @@ buffManager.add_buff = function(buff)
 	elseif target_setting then
 		local setting = settings.global
 		if setting[target_setting] then
-			buffManager._process_add(data.state.setting, target, buff)
+			buffManager._process_add(data.state.setting, setting[target_setting], buff)
 		end
 	end
 end
@@ -135,7 +138,6 @@ buffManager.activate_buffs = function(event)
 					-- Check for can start
 					if line.active == false and buffManager._validate_buff(config, current_value, orig_value, line) then
 						line.start = tick
-						line.expires = tick + line.duration
 					end
 
 					if line.start and line.start <= tick and line.active == false then
@@ -149,6 +151,7 @@ buffManager.activate_buffs = function(event)
 							target_table[buff.field] = current_value + line.value
 						end
 						game.print('activated ' .. idx .. " buff_type")
+						line.expires = tick + line.duration
 						line.active = true
 					end
 
@@ -222,6 +225,9 @@ buffManager.without_buff = function(current_value, fields)
 end
 
 buffManager.empty = function(config, target, tick)
+end
+
+buffManager.random_teleport = function(config, target, tick)
 
 end
 

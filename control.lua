@@ -7,6 +7,7 @@ require "util"
 Event = require('__stdlib__/stdlib/event/event')
 api = require "script.api"
 require "script.crowdcontrol"
+statistics = require("script.statistics")
 local output_file = 'tvc_api.json'
 
 local function init_globals()
@@ -18,7 +19,8 @@ local function init_globals()
 			member = true,
 			follow = false,
 			raid = false,
-			host = false
+			host = false,
+			merch = false,
 		}
 	}
 
@@ -30,6 +32,7 @@ local function init_globals()
 			follow = {},
 			raid = {},
 			host = {},
+			merch = {},
 		}
 	}
 
@@ -44,19 +47,8 @@ local function write_external(command, msg, out_file)
 		out_file = out_file or output_file
 		game.write_file(out_file, game.table_to_json(output), false, 0)
 	end
-end
 
-local publish = function(output)
-	if rcon then
-		local type_out = type(output)
-		if type_out == 'table' then
-			rcon.print(game.table_to_json(output))
-		elseif type_out == 'boolean' or type_out == 'number' or type_out == 'string' or type_out == 'nil' then
-			rcon.print(output)
-		end
-	end
-
-	return output
+	return msg;
 end
 
 init_globals()
@@ -118,8 +110,11 @@ remote.add_interface("tvc_api", {
 	raid = function(message)
 		api.on_raid(message)
 	end,
+	merch = function(message)
+		api.on_merch(message);
+	end,
 	get_deathcount_list = function()
-		return publish(global.data.deathcount)
+		return write_external('deathcount', global.data.deathcount)
 	end,
 	-- [[
 	-- Setting for enabling/disabling the statistics export
@@ -137,17 +132,24 @@ remote.add_interface("tvc_api", {
 	end,
 	get_stored_requests = function(type)
 		if global.config.store_requests[type] then
-			return publish(global.data.requests[type])
+			return write_external('get_stored_requests', global.data.requests[type])
 		elseif type == 'all' then
-			return publish(global.data.requests)
+			return write_external('get_stored_requests', global.data.requests)
 		end
 
-		return publish(nil)
+		return write_external('get_stored_requests', nil)
 	end,
 	collect_statistics = function()
 		if global.config.export_statistics == 2 then
-			return publish(statistics:store_results(game.tick))
+			return write_external('collect_statistics', statistics:store_results(game.tick))
 		end
+	end,
+	write_out = function(command, value)
+		if type(value) == 'function' then
+			value = value();
+		end
+
+		return write_external(command, value);
 	end,
 	message_to_game_chat = function(msg, color)
 		-- Use chat color if available
@@ -163,7 +165,7 @@ remote.add_interface("tvc_api", {
 			if player and player.valid then
 				player.print(msg.name .. ": " .. msg.msg, color)
 			elseif rcon then
-				publish('Player not found; ' .. msg.to_player)
+				write_external('in_game_message', 'Player not found; ' .. msg.to_player)
 			end
 		else
 			game.print(msg.name .. ": " .. msg.msg, color)

@@ -14,14 +14,14 @@ local cfg = {
 		max = 3,
 		stackable = true
 	},
-	damage_mod = {
-		min = -100,
-		max = 100,
-		stackable = false,
-		apply_function = 'empty'
+	teleport = {
+		cooldown = 10,
+		apply_function = 'random_teleport'
 	},
 	fakedeath = {
 		cooldown = 30,
 		apply_function = 'fakedeath'
 	}
 }
+
+return cfg;

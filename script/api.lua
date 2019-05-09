@@ -8,6 +8,7 @@ api.setup_events = function()
 			api_on_follow = Event.generate_event_name('api_on_follow'),
 			api_on_raid = Event.generate_event_name('api_on_raid'),
 			api_on_host = Event.generate_event_name('api_on_host'),
+			api_on_merch = Event.generate_event_name('api_on_merch'),
 		}
 	end
 end
@@ -35,6 +36,11 @@ end
 api.on_raid = function(message)
 	Event.raise_event(global.events.api_on_raid, { message = message, tick = game.tick });
 	api.store_request('raid', message)
+end
+
+api.on_merch = function(message)
+	Event.raise_event(global.events.api_on_merch, { message = message, tick = game.tick });
+	api.store_request('merch', message)
 end
 
 api.store_request = function(type, message)
@@ -72,6 +78,9 @@ api.store_request = function(type, message)
 			entry.amount = message.viewers
 		elseif (type == 'follow') then
 			-- continue
+		elseif (type == 'merch') then
+			entry.product = message.product
+			entry.message = message.message or nil
 		else
 			return ;
 		end

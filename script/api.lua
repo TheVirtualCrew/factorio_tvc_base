@@ -78,6 +78,9 @@ api.store_request = function(type, message)
 			entry.amount = message.viewers
 		elseif (type == 'follow') then
 			-- continue
+		elseif (type == 'merch') then
+			entry.product = message.product
+			entry.message = message.message or nil
 		else
 			return ;
 		end

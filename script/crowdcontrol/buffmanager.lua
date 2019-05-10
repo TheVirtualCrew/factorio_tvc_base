@@ -93,7 +93,6 @@ buffManager._add_buff_to_list = function(list, buff, insert, current_value, orig
 	if (buffManager._validate_buff(config, current_value, orig_value, insert)) then
 		insert.start = tick
 	end
-	game.print(serpent.block(insert) .. " Added to list")
 
 	table.insert(list, insert)
 end
@@ -150,12 +149,10 @@ buffManager.activate_buffs = function(event)
 						else
 							target_table[buff.field] = current_value + line.value
 						end
-						game.print('activated ' .. idx .. " buff_type")
 						line.expires = tick + line.duration
 						line.active = true
 					end
 
-					game.print('check ' .. (line.expires or 'nil') .. " against " .. tick .. " buff_type")
 					if line.expires and line.expires < tick then
 						if config.apply_function == nil then
 							target_table[buff.field] = current_value - line.value
@@ -212,6 +209,35 @@ buffManager.get_player_buff = function(player, buffname)
 	end
 
 	return 0
+end
+
+buffManager._calculate_current_active_buffs = function()
+	local current_active = {};
+	for target, t in pairs(data.state) do
+		for _, row in pairs(t) do
+			local target_table
+			if target == 'setting' then
+				target_table = settings.global[row.name]
+			else
+				target_table = game[target][row.name]
+			end
+			for buff_type, buff in pairs(row.buffs) do
+				local active_list = table.filter(buff.list, function(v)
+					return v.active;
+				end);
+
+				for idx, line in pairs(active_list) do
+					if current_active[buff_type] == nil then
+						current_active[buff_type] = 0
+					end
+
+					current_active[buff_type] = current_active[buff_type] + line.value
+				end
+			end
+		end
+	end
+
+	buffManager.get_data().current_active = current_active;
 end
 
 buffManager.without_buff = function(current_value, fields)

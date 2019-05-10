@@ -10,18 +10,6 @@ local crowdcontrol = {}
 
 local buffManager = require "script.crowdcontrol.buffmanager"
 local base_config = require "script.crowdcontrol.config"
--- example
-local buffManager_opts = {
-	active_buff = {
-		handcraft = {
-			{ value = 10, expires = 2000, source = 'display_name' },
-			{ value = 10, starts = 2000, expires = 4000, source = 'display_name' }
-		},
-		botspeed = {
-			{ value = 3, starts = 500, expires = 1000, source = 'display_name' }
-		}
-	},
-}
 
 crowdcontrol.init = function()
 	if global.crowdcontrol == nil then
@@ -33,7 +21,8 @@ crowdcontrol.init = function()
 				players = {},
 				setting = {}
 			},
-			last_items = {}
+			last_items = {},
+			current_active = {},
 		}
 	end
 end

@@ -163,11 +163,17 @@ remote.add_interface("tvc_api", {
 			local player = game.players[msg.to_player]
 			if player and player.valid then
 				player.print(msg.name .. ": " .. msg.msg, color)
+				if game.is_valid_sound_path("api_console_message") then
+					game.play_sound({ path = 'api_console_message' });
+				end
 			elseif rcon then
 				write_external('in_game_message', 'Player not found; ' .. msg.to_player)
 			end
 		else
 			game.print(msg.name .. ": " .. msg.msg, color)
+			if game.is_valid_sound_path("api_console_message") then
+				game.play_sound({ path = 'api_console_message' });
+			end
 		end
 	end,
 })

@@ -50,6 +50,21 @@ local function write_external(command, msg, out_file)
 	return msg;
 end
 
+function raise_event(event_name, event_data, between)
+	local responses
+	between = between or function() end
+	for interface_name, interface_functions in pairs(remote.interfaces) do
+		if interface_functions[event_name] then
+			local cur_response = remote.call(interface_name, event_name, event_data)
+			if cur_response ~= nil then
+				responses = cur_response
+				between(event_data, cur_response)
+			end
+		end
+	end
+	return responses
+end
+
 init_globals()
 
 Event.on_init(function()
@@ -62,7 +77,7 @@ Event.on_event(defines.events.on_tick, function(event)
 	end
 end)
 
-Event.on_event(defines.events.on_player_died, function(event)
+Event.on_event(defines.events.on_pre_player_died, function(event)
 	local cause = 'other'
 	local player_name = game.players[event.player_index].name
 	local train_types = { locomotive = 1, ["cargo-wagon"] = 1, ["artillery-wagon"] = 1, ["fluid-wagon"] = 1 }
@@ -85,6 +100,14 @@ Event.on_event(defines.events.on_player_died, function(event)
 			biter = 0,
 			other = 0,
 		}
+	end
+
+	local copy = table.deepcopy(event)
+	copy.cause_name = cause
+	cause = raise_event('tvc_api_on_death', copy, function(e, b) e.cause_name = b end) or cause
+
+	if global.data.deathcount[player_name][cause] == nil then
+		global.data.deathcount[player_name][cause] = 0
 	end
 
 	global.data.deathcount[player_name][cause] = global.data.deathcount[player_name][cause] + 1
@@ -176,4 +199,5 @@ remote.add_interface("tvc_api", {
 			end
 		end
 	end,
+	dee = function()game.print(serpent.block(global.data.deathcount)) end
 })

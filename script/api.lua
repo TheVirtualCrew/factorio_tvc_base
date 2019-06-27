@@ -1,8 +1,9 @@
 local api = {};
 
-api.setup_events = function()
-	if (#global.events == 0) then
-		global.events = {
+api.setup_events = function(force)
+	force = force or false
+	if #events == 0 or force then
+		events = {
 			api_on_donation = Event.generate_event_name('api_on_donation'),
 			api_on_member = Event.generate_event_name('api_on_member'),
 			api_on_follow = Event.generate_event_name('api_on_follow'),
@@ -14,32 +15,32 @@ api.setup_events = function()
 end
 
 api.on_donation = function(message)
-	Event.raise_event(global.events.api_on_donation, { message = message, tick = game.tick });
+	Event.raise_event(events.api_on_donation, { message = message, tick = game.tick });
 	api.store_request('donation', message)
 end
 
 api.on_member = function(message)
-	Event.raise_event(global.events.api_on_member, { message = message, tick = game.tick });
+	Event.raise_event(events.api_on_member, { message = message, tick = game.tick });
 	api.store_request('member', message)
 end
 
 api.on_follow = function(message)
-	Event.raise_event(global.events.api_on_follow, { message = message, tick = game.tick });
+	Event.raise_event(events.api_on_follow, { message = message, tick = game.tick });
 	api.store_request('follow', message)
 end
 
 api.on_host = function(message)
-	Event.raise_event(global.events.api_on_host, { message = message, tick = game.tick });
+	Event.raise_event(events.api_on_host, { message = message, tick = game.tick });
 	api.store_request('host', message)
 end
 
 api.on_raid = function(message)
-	Event.raise_event(global.events.api_on_raid, { message = message, tick = game.tick });
+	Event.raise_event(events.api_on_raid, { message = message, tick = game.tick });
 	api.store_request('raid', message)
 end
 
 api.on_merch = function(message)
-	Event.raise_event(global.events.api_on_merch, { message = message, tick = game.tick });
+	Event.raise_event(events.api_on_merch, { message = message, tick = game.tick });
 	api.store_request('merch', message)
 end
 

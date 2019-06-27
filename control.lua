@@ -8,9 +8,9 @@ Event = require('__stdlib__/stdlib/event/event')
 api = require "script.api"
 statistics = require("script.statistics")
 local output_file = 'tvc_api.json'
+events = {}
 
 local function init_globals()
-	global.events = global.events or {}
 	global.config = global.config or {
 		export_statistics = false,
 		store_requests = {
@@ -70,6 +70,9 @@ init_globals()
 Event.on_init(function()
 	init_globals()
 end)
+Event.on_load(function()
+	api.setup_events(true)
+end);
 
 Event.on_event(defines.events.on_tick, function(event)
 	if global.config.export_statistics == 1 and event.tick ~= 0 and event.tick % 60 == 0 then
@@ -115,7 +118,7 @@ end)
 
 remote.add_interface("tvc_api", {
 	get_events = function()
-		return global.events
+		return events
 	end,
 	donation = function(message)
 		api.on_donation(message)
@@ -199,5 +202,4 @@ remote.add_interface("tvc_api", {
 			end
 		end
 	end,
-	dee = function()game.print(serpent.block(global.data.deathcount)) end
 })

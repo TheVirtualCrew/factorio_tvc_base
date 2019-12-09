@@ -20,6 +20,7 @@ local function init_globals()
 			raid = false,
 			host = false,
 			merch = false,
+			subgift = false,
 		}
 	}
 
@@ -32,6 +33,7 @@ local function init_globals()
 			raid = {},
 			host = {},
 			merch = {},
+			subgift = {},
 		}
 	}
 
@@ -138,6 +140,9 @@ remote.add_interface("tvc_api", {
 	merch = function(message)
 		api.on_merch(message);
 	end,
+	subgift = function(message)
+		api.on_subgift(message);
+	end,
 	get_deathcount_list = function()
 		return write_external('deathcount', global.data.deathcount)
 	end,
@@ -152,7 +157,7 @@ remote.add_interface("tvc_api", {
 	end,
 	set_store_requests = function(type, bool)
 		if global.config.store_requests[type] ~= nil then
-			global.config.store_requests = bool
+			global.config.store_requests[type] = bool
 		end
 	end,
 	get_stored_requests = function(type)
@@ -163,6 +168,9 @@ remote.add_interface("tvc_api", {
 		end
 
 		return write_external('get_stored_requests', nil)
+	end,
+	clear_statistics_from_tick = function(tick)
+		api.remove_stored_requests_since_tick(tick);
 	end,
 	collect_statistics = function()
 		if global.config.export_statistics == 2 then

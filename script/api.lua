@@ -1,4 +1,5 @@
 local api = {};
+local temp_subgift = {}
 
 api.setup_events = function(force)
 	force = force or false
@@ -10,6 +11,7 @@ api.setup_events = function(force)
 			api_on_raid = Event.generate_event_name('api_on_raid'),
 			api_on_host = Event.generate_event_name('api_on_host'),
 			api_on_merch = Event.generate_event_name('api_on_merch'),
+			api_on_subgift = Event.generate_event_name('api_on_subgift'),
 		}
 	end
 end
@@ -42,6 +44,18 @@ end
 api.on_merch = function(message)
 	Event.raise_event(events.api_on_merch, { message = message, tick = game.tick });
 	api.store_request('merch', message)
+end
+
+-- Have to check for duplicate events... twitch tend to send it twice
+api.on_subgift = function(message)
+	local last = temp_subgift
+	if last and last.event_id == message.event_id then
+		return
+	end
+
+	last = message
+	Event.raise_event(events.api_on_subgift, { message = message, tick = game.tick });
+	api.store_request('subgift', message)
 end
 
 api.store_request = function(type, message)

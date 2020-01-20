@@ -1,49 +1,49 @@
-local api = {};
+local api = {}
 local temp_subgift = {}
 
 api.setup_events = function(force)
 	force = force or false
 	if #events == 0 or force then
 		events = {
-			api_on_donation = Event.generate_event_name('api_on_donation'),
-			api_on_member = Event.generate_event_name('api_on_member'),
-			api_on_follow = Event.generate_event_name('api_on_follow'),
-			api_on_raid = Event.generate_event_name('api_on_raid'),
-			api_on_host = Event.generate_event_name('api_on_host'),
-			api_on_merch = Event.generate_event_name('api_on_merch'),
-			api_on_subgift = Event.generate_event_name('api_on_subgift'),
+			api_on_donation = Event.generate_event_name("api_on_donation"),
+			api_on_member = Event.generate_event_name("api_on_member"),
+			api_on_follow = Event.generate_event_name("api_on_follow"),
+			api_on_raid = Event.generate_event_name("api_on_raid"),
+			api_on_host = Event.generate_event_name("api_on_host"),
+			api_on_merch = Event.generate_event_name("api_on_merch"),
+			api_on_subgift = Event.generate_event_name("api_on_subgift")
 		}
 	end
 end
 
 api.on_donation = function(message)
-	Event.raise_event(events.api_on_donation, { message = message, tick = game.tick });
-	api.store_request('donation', message)
+	Event.raise_event(events.api_on_donation, {message = message, tick = game.tick})
+	api.store_request("donation", message)
 end
 
 api.on_member = function(message)
-	Event.raise_event(events.api_on_member, { message = message, tick = game.tick });
-	api.store_request('member', message)
+	Event.raise_event(events.api_on_member, {message = message, tick = game.tick})
+	api.store_request("member", message)
 end
 
 api.on_follow = function(message)
-	Event.raise_event(events.api_on_follow, { message = message, tick = game.tick });
-	api.store_request('follow', message)
+	Event.raise_event(events.api_on_follow, {message = message, tick = game.tick})
+	api.store_request("follow", message)
 end
 
 api.on_host = function(message)
-	Event.raise_event(events.api_on_host, { message = message, tick = game.tick });
-	api.store_request('host', message)
+	Event.raise_event(events.api_on_host, {message = message, tick = game.tick})
+	api.store_request("host", message)
 end
 
 api.on_raid = function(message)
-	Event.raise_event(events.api_on_raid, { message = message, tick = game.tick });
-	api.store_request('raid', message)
+	Event.raise_event(events.api_on_raid, {message = message, tick = game.tick})
+	api.store_request("raid", message)
 end
 
 api.on_merch = function(message)
-	Event.raise_event(events.api_on_merch, { message = message, tick = game.tick });
-	api.store_request('merch', message)
+	Event.raise_event(events.api_on_merch, {message = message, tick = game.tick})
+	api.store_request("merch", message)
 end
 
 -- Have to check for duplicate events... twitch tend to send it twice
@@ -54,27 +54,27 @@ api.on_subgift = function(message)
 	end
 
 	last = message
-	Event.raise_event(events.api_on_subgift, { message = message, tick = game.tick });
-	api.store_request('subgift', message)
+	Event.raise_event(events.api_on_subgift, {message = message, tick = game.tick})
+	api.store_request("subgift", message)
 end
 
 api.store_request = function(type, message)
 	if global.config.store_requests[type] then
-		local entry = {};
-		if (type == 'donation') then
+		local entry = {}
+		if (type == "donation") then
 			entry.amount = message.amount
 			entry.message = message.message
 
-			if (message.type ~= 'bits') then
+			if (message.type ~= "bits") then
 				entry.formatted_amount = message.formatted_amount
 				entry.currency = message.currency
 			end
-		elseif (type == 'member') then
+		elseif (type == "member") then
 			-- general
 			entry.months = message.months
 
 			-- Twitch stuff
-			entry.sub_plan = '1000';
+			entry.sub_plan = "1000"
 			if message.sub_plan then
 				entry.sub_plan = message.sub_plan
 				entry.sub_type = message.sub_type
@@ -87,29 +87,29 @@ api.store_request = function(type, message)
 			if message.streak_months then
 				entry.streak_months = message.streak_months
 			end
-		elseif (type == 'raid') then
+		elseif (type == "raid") then
 			entry.amount = message.raiders
-		elseif (type == 'host') then
+		elseif (type == "host") then
 			entry.amount = message.viewers
-		elseif (type == 'follow') then
+		elseif (type == "follow") then
 			-- continue
-		elseif (type == 'merch') then
+		elseif (type == "merch") then
 			entry.product = message.product
 			entry.message = message.message or nil
 		else
-			return ;
+			return
 		end
 
 		entry.type = message.type
 		entry.name = message.display_name or message.name
 		entry.tick = game.tick
 
-		table.insert(global.data.requests[type], entry);
+		table.insert(global.data.requests[type], entry)
 	end
 end
 
 api.remove_stored_requests_since_tick = function(tick)
-	local requests = global.data.requests;
+	local requests = global.data.requests
 	for _, type in pairs(requests) do
 		for i, entry in pairs(type) do
 			if entry.tick and entry.tick < tick then

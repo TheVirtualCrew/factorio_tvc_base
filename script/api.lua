@@ -113,7 +113,7 @@ api.remove_stored_requests_since_tick = function(tick)
 	for _, type in pairs(requests) do
 		for i, entry in pairs(type) do
 			if entry.tick and entry.tick < tick then
-				table.remove(type, i)
+				type[i] = nil
 			end
 		end
 	end

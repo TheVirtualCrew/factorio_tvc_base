@@ -10,6 +10,8 @@ statistics = require("script.statistics")
 local output_file = 'tvc_api.json'
 events = {}
 
+CLEAR_TIMER = 60 * 60 * 60 * 24;
+
 local function init_globals()
 	global.config = global.config or {
 		export_statistics = false,
@@ -116,6 +118,12 @@ Event.on_event(defines.events.on_pre_player_died, function(event)
 	end
 
 	global.data.deathcount[player_name][cause] = global.data.deathcount[player_name][cause] + 1
+end)
+
+Event.on_nth_tick(CLEAR_TIMER, function(event)
+	if (event.tick - CLEAR_TIMER) > 0 then
+		api.remove_stored_requests_since_tick(event.tick - CLEAR_TIMER)
+	end
 end)
 
 remote.add_interface("tvc_api", {

@@ -96,6 +96,7 @@ api.store_request = function(type, message)
 		elseif (type == "merch") then
 			entry.product = message.product
 			entry.message = message.message or nil
+		elseif (type == "subgift") then
 		else
 			return
 		end

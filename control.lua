@@ -13,39 +13,35 @@ events = {}
 CLEAR_TIMER = 60 * 60 * 60 * 24
 
 local function init_globals()
-	global.config =
-		global.config or
-		{
-			export_statistics = false,
-			store_requests = {
-				donation = true,
-				member = true,
-				follow = false,
-				raid = false,
-				host = false,
-				merch = false,
-				subgift = true
-			}
+	global.config = global.config or {
+		export_statistics = false,
+		store_requests = {
+			donation = true,
+			member = true,
+			follow = false,
+			raid = false,
+			host = false,
+			merch = false,
+			subgift = true
 		}
+	}
 
 	if not global.config.store_requests.subgift then
 		global.config.store_requests.subgift = true
 	end
 
-	global.data =
-		global.data or
-		{
-			deathcount = {},
-			requests = {
-				donation = {},
-				member = {},
-				follow = {},
-				raid = {},
-				host = {},
-				merch = {},
-				subgift = {}
-			}
+	global.data = global.data or {
+		deathcount = {},
+		requests = {
+			donation = {},
+			member = {},
+			follow = {},
+			raid = {},
+			host = {},
+			merch = {},
+			subgift = {}
 		}
+	}
 
 	api.setup_events()
 end

@@ -35,6 +35,8 @@ The following events are triggered on which you can react
 - api_on_raid
 - api_on_host
 - api_on_merch
+- api_on_subgift
+- api_on_channel_point
 
 The events contain the following information:
 

@@ -1,18 +1,27 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 21. 02. 2020
+  Changes:
+    - Refactored most of the code so it doesnt need stdlib
+    - Added channel point entry
+---------------------------------------------------------------------------------------------------
 Version: 0.2.1
 Date: 26. 01. 2020
+  Changes:
     - Minor fix for subgifted events
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 22. 01. 2020
+  Changes:
     - Updated for 0.18
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.7
 Date: 09. 12. 2019
+  Changes:
     - Added mysterygift/subgifter support (for a chain of giftsubs)
     - Forgotten updates are lost
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.0
 Date: 29. 04. 2019
-    Initial:
-        - A seperate mod to handle the donation triggers
+  Changes:
+    - A seperate mod to handle the donation triggers

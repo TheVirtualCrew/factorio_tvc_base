@@ -1,8 +1,8 @@
 local api = {}
 local temp_subgift = {}
 local shared = require("shared")
+events = {}
 local script_data = {
-  events = {},
   requests = {
     donation = {},
     member = {},
@@ -27,8 +27,8 @@ local script_data = {
 
 local function setup_events(forced)
   forced = forced or false
-  if #script_data.events == 0 or forced then
-    script_data.events = {
+  if (events.api_on_donation == nil) or forced then
+    events = {
       api_on_donation = script.generate_event_name(),
       api_on_member = script.generate_event_name(),
       api_on_follow = script.generate_event_name(),
@@ -96,7 +96,7 @@ end
 api.get_events = function()
   setup_events()
 
-  return script_data.events
+  return events
 end
 
 api.get_store_requests = function(type)
@@ -116,32 +116,32 @@ api.set_store_requests = function(type, bool)
 end
 
 api.on_donation = function(message)
-  script.raise_event(script_data.events.api_on_donation, {message = message, tick = game.tick})
+  script.raise_event(events.api_on_donation, {message = message, tick = game.tick})
   store_request("donation", message)
 end
 
 api.on_member = function(message)
-  script.raise_event(script_data.events.api_on_member, {message = message, tick = game.tick})
+  script.raise_event(events.api_on_member, {message = message, tick = game.tick})
   store_request("member", message)
 end
 
 api.on_follow = function(message)
-  script.raise_event(script_data.events.api_on_follow, {message = message, tick = game.tick})
+  script.raise_event(events.api_on_follow, {message = message, tick = game.tick})
   store_request("follow", message)
 end
 
 api.on_host = function(message)
-  script.raise_event(script_data.events.api_on_host, {message = message, tick = game.tick})
+  script.raise_event(events.api_on_host, {message = message, tick = game.tick})
   store_request("host", message)
 end
 
 api.on_raid = function(message)
-  script.raise_event(script_data.events.api_on_raid, {message = message, tick = game.tick})
+  script.raise_event(events.api_on_raid, {message = message, tick = game.tick})
   store_request("raid", message)
 end
 
 api.on_merch = function(message)
-  script.raise_event(script_data.events.api_on_merch, {message = message, tick = game.tick})
+  script.raise_event(events.api_on_merch, {message = message, tick = game.tick})
   store_request("merch", message)
 end
 
@@ -153,12 +153,12 @@ api.on_subgift = function(message)
   end
 
   last = message
-  script.raise_event(script_data.events.api_on_subgift, {message = message, tick = game.tick})
+  script.raise_event(events.api_on_subgift, {message = message, tick = game.tick})
   store_request("subgift", message)
 end
 
 api.on_channel_point = function(message)
-  script.raise_event(script_data.events.api_on_channel_point, {message = message, tick = game.tick})
+  script.raise_event(events.api_on_channel_point, {message = message, tick = game.tick})
   store_request("channel_point", message)
 end
 

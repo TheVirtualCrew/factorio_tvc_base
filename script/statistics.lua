@@ -1,4 +1,5 @@
 -- Statistics counter for outputing to file
+require "util"
 
 local shared = require("shared")
 local write_external = shared.write_external

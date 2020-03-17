@@ -11,8 +11,8 @@ local script_data = {
 
 local function combine(tables)
   local res = {}
-  for _, table in ipairs(tables) do
-    for _, tab in pairs(table) do
+  for _, tabs in ipairs(tables) do
+    for _, tab in pairs(tabs) do
       table.insert(res, tab)
     end
   end

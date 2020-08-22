@@ -1,13 +1,14 @@
 {
   "name": "tvc_api_base",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "title": "TVC API Integration",
   "author": "Tim Vroom @TheVirtualCrew",
   "contact": "",
   "homepage": "",
-  "factorio_version": "0.18",
+  "factorio_version": "1.0",
   "dependencies": [
-    "base >= 0.18"
+    "base >= 1.0",
+    "(?) graftorio"
   ],
   "description": "Integration with streamlabs and other tools"
 }

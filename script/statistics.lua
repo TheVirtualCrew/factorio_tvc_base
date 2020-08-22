@@ -79,9 +79,9 @@ statistics.store_results = function(force, tick)
   local result =
     combine(
     {
-      statistics.get_items(force, tick),
-      statistics.get_kills(force, tick),
-      statistics.get_build(force, tick)
+      statistics.get_items(playerForce, tick),
+      statistics.get_kills(playerForce, tick),
+      statistics.get_build(playerForce, tick)
     }
   )
 
@@ -150,6 +150,8 @@ statistics.events = {
       local v = event.cause
       if train_types[v.type] then
         cause = "train"
+      elseif v.type == "spider-vehicle" and v.valid then
+        cause = "spidertron"
       elseif v.type == "player" and v.player ~= nil and v.player.name == player_name then
         cause = "suicide"
       elseif v.force and v.force.name == "enemy" then
@@ -162,6 +164,7 @@ statistics.events = {
         suicide = 0,
         train = 0,
         biter = 0,
+        spidertron = 0,
         other = 0
       }
     end

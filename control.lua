@@ -7,6 +7,7 @@ handler.add_libraries(
 	{
 		require("script.api"),
 		require("script.statistics"),
-		require("script.remote_interface")
+		require("script.remote_interface"),
+		require("script.graftorio")
 	}
 )

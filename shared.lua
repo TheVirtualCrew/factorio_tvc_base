@@ -9,7 +9,7 @@ function data.write_external(command, msg, out_file)
   if rcon and out_file == nil then
     rcon.print(game.table_to_json(output))
   else
-    out_file = out_file or output_file
+    out_file = out_file or data.output_file
     game.write_file(out_file, game.table_to_json(output), false, 0)
   end
 

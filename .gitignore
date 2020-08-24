@@ -5,3 +5,4 @@ node/var/log/*
 !node/var/log/.gitkeep
 .DS_Store
 .idea
+.vscode

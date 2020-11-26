@@ -11,7 +11,8 @@ local script_data = {
     host = {},
     merch = {},
     subgift = {},
-    channel_point = {}
+    channel_point = {},
+    hypetrain = {}
   },
   store_requests = {
     donation = true,
@@ -21,7 +22,8 @@ local script_data = {
     host = false,
     merch = false,
     subgift = true,
-    channel_point = false
+    channel_point = false,
+    hypetrain = false
   }
 }
 
@@ -36,7 +38,10 @@ local function setup_events(forced)
       api_on_host = script.generate_event_name(),
       api_on_merch = script.generate_event_name(),
       api_on_subgift = script.generate_event_name(),
-      api_on_channel_point = script.generate_event_name()
+      api_on_channel_point = script.generate_event_name(),
+      api_on_hypetrain_start = script.generate_event_name(),
+      api_on_hypetrain_progress = script.generate_event_name(),
+      api_on_hypetrain_end = script.generate_event_name(),
     }
   end
 end
@@ -81,6 +86,9 @@ local function store_request(type, message)
       entry.message = message.message or nil
     elseif (type == "subgift") then
     elseif (type == "channel_point") then
+    elseif (type == "hypetrain_start") then
+    elseif (type == "hypetrain_progress") then
+    elseif (type == "hypetrain_end") then
     else
       return
     end
@@ -160,6 +168,21 @@ end
 api.on_channel_point = function(message)
   script.raise_event(events.api_on_channel_point, {message = message, tick = game.tick})
   store_request("channel_point", message)
+end
+
+api.on_hypetrain_start = function(message)
+  script.raise_event(events.api_on_hypetrain_start, {message = message, tick = game.tick})
+  store_request("hypetrain", message)
+end
+
+api.on_hypetrain_progress = function(message)
+  script.raise_event(events.api_on_hypetrain_progress, {message = message, tick = game.tick})
+  store_request("hypetrain", message)
+end
+
+api.on_hypetrain_end = function(message)
+  script.raise_event(events.api_on_hypetrain_end, {message = message, tick = game.tick})
+  store_request("hypetrain", message)
 end
 
 api.remove_stored_requests_since_tick = function(tick)

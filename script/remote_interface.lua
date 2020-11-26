@@ -32,6 +32,15 @@ local interface = {
   channel_point = function(message)
     api.on_channel_point(message)
   end,
+  hypetrain_start = function(message)
+    api.on_hypetrain_start(message)
+  end,
+  hypetrain_progress = function(message)
+    api.on_hypetrain_progress(message)
+  end,
+  hypetrain_end = function(message)
+    api.on_hypetrain_end(message)
+  end,
   get_deathcount_list = function()
     return write_external("deathcount", statistics.get_deathcount())
   end,

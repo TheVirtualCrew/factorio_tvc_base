@@ -50,6 +50,14 @@ Depending on the type the message can differ.
 
 @TODO: add all the different message info
 
+# Debug
+
+To easily most of the events, there is a simple debug UI in place. Just type
+```
+/tvc_debug
+```
+into the console
+
 # Deathcounter
 
 The deathcounter counts the player deaths and can be used.
